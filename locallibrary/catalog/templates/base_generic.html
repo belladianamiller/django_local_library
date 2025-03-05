@@ -26,23 +26,39 @@
         </ul>
         <ul class="sidebar-nav">
           …
-         {% if user.is_authenticated %}
-           <li>User: {{ user.get_username }}</li>
-           <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
-           <li>
-             <form id="logout-form" method="post" action="{% url 'logout' %}">
-               {% csrf_token %}
-               <button type="submit" class="btn btn-link">Logout</button>
-             </form>
-           </li>
-         {% else %}
-           <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
-         {% endif %}
+          {% if user.is_authenticated %}
+          <li>User: {{ user.get_username }}</li>
+          <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
+          <li>
+            <form id="logout-form" method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link">Logout</button>
+            </form>
+          </li>
+          {% else %}
+          <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+          {% endif %}
           …
         </ul>
-      {% endblock %}
+        {% endblock %}
       </div>
-      <div class="col-sm-10 ">{% block content %}{% endblock %}{% block pagination %}
+      <div class="col-sm-10 ">{% block content %}
+        <h1>All Borrowed Books</h1>
+
+        {% if bookinstance_list %}
+        <ul>
+
+          {% for bookinst in bookinstance_list %}
+          <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+            <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> ({{ bookinst.due_back }})
+            {% if user.is_staff %}- {{ bookinst.borrower }}{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+
+        {% else %}
+        <p>There are no books borrowed.</p>
+        {% endif %}{% endblock %}{% block pagination %}
         {% if is_paginated %}
         <div class="pagination">
           <span class="page-links">

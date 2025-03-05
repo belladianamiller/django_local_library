@@ -9,3 +9,17 @@ urlpatterns = [
 urlpatterns += [
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
 ]
+urlpatterns += [
+    path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
+]
+from .views import AuthorDetailView
+
+urlpatterns += [
+    path('author/<int:pk>/', AuthorDetailView.as_view(), name='author-detail'),
+]
+
+urlpatterns += [
+    path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
+    path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
+    path('author/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
+]
