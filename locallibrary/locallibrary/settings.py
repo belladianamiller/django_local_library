@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
 import environ
+import sys
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -77,8 +79,6 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 
 
 # Database
-import sys
-import dj_database_url
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
